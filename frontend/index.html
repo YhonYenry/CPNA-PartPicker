@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Capstone Frontend</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" type="image/png" href="./CPNAicon.png">
+  <script src="./signin.js"></script>
+</head>
+
+<body>
+  <main>
+    <h1>Component Compatibility Check</h1>
+    <img id="logo" src="./CPNAlogo.png" alt="Logo">
+    <form id="login-form">
+      <h2>Sign In</h2>
+      <label for="username" id="username_label">Username:</label>
+      <input type="text" id="username" name="username" required autocomplete="new-username">
+
+      <label for="password" id="password_label">Password:</label>
+      <input type="password" id="password" name="password" required autocomplete="new-password">
+
+      <button type="button" onclick="signin()">Sign In</button>
+      <button type="button" id="signup_button" onclick="redirect_signup()">Create Account</button>
+
+      <div id="forgot-password">
+        <p onclick="open_forgot_password()" id="forgot-password-link">Forgot Password?</p>
+      </div>
+    </form>
+
+    <form id="reset-password-form">
+      <h2>Reset Password</h2>
+      <label for="email" id="email_label">Email Address:</label>
+      <input type="text" id="email" name="email" required autocomplete="new-email">
+      <div id="reset-buttons">
+        <button type="button" class="cancel-reset-button" onclick="close_forgot_password()">Cancel</button>
+        <button type="button" class="send-reset-button" onclick="send_password_reset()">Send Code</button>
+      </div>
+    </form>
+    <form id="reset-code-form">
+      <h2>Enter Reset Code</h2>
+      <label for="reset_code" id="reset_code_label">Reset Code:</label>
+      <input type="text" id="reset_code" name="reset_code" required autocomplete="new-code>
+
+      <label for=" new_password" id="password_label">Password:</label>
+      <input type="password" id="new_password" name="new_password" required autocomplete="new-password">
+
+      <label for="confirm_password" id="confirm_password_label">Confirm Password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+
+      <div id="reset-buttons">
+        <button type="button" class="cancel-reset-button" onclick="close_reset_code()">Back</button>
+        <button type="button" class="send-reset-button" onclick="reset_password()">Reset Password</button>
+      </div>
+    </form>
+  </main>
+</body>
+
+</html>

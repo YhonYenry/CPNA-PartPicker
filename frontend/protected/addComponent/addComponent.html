@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Capstone Frontend</title>
+    <link rel="stylesheet" href="./dashboard.css">
+    <script src="./dashboard.js"></script>
+</head>
+
+<body>
+    <main>
+        <div id="dashboard">
+            <div id="title">
+                <h2>Add Component</h2>
+            </div>
+            <div id="main-content">
+                <div id="left-dashboard">
+                    <div id="create-build" onclick="openCreateBuild()" class="dashboard-button">
+                        Build New System
+                    </div>
+                    <div id="component-search" onclick="openComponentList()" class="dashboard-button">
+                        Component List
+                    </div>
+                    <div id="add-component" onclick="openAddComponent()" class="dashboard-button">
+                        Add Component
+                    </div>
+                    <div id="Build History" onclick="openBuildHistory()" class=" dashboard-button">
+                        Build History
+                    </div>
+                    <div id="sign-out" onclick="clearCookie()" class="dashboard-button">
+                        Sign out
+
+                    </div>
+                </div>
+                <div id="right-dashboard">
+                    <div id="right-top">
+                        <div id="right-content-1">
+                            <div class="content-title">
+                                <h3>Build Information</h3>
+                            </div>
+                        </div>
+
+                        <div id="right-content-2">
+                            <div class="content-title">
+                                <h3>Revenue</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="right-bottom">
+                        <div id="right-content-bottom">
+                            <div class="content-title">
+                                <h3>Inventory Information</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </main>
+</body>
+
+</html>
