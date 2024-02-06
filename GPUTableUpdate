@@ -17,9 +17,9 @@ INSERT INTO GPU (
     Weightg, 
     Price
 ) VALUES (
-    405, -- Assuming 405 is a valid PartsID
+    405, -- Part ID
     4001, -- CategoryID for GPU
-    'GeForce RTX 3080', -- Name of the part
+    'GeForce RTX 3080', -- Name
     4050, -- ManufacturerID for NVIDIA
     '10GB', -- MemorySize
     'GDDR6X', -- MemoryType
@@ -29,5 +29,70 @@ INSERT INTO GPU (
     'PCI Express 4.0', -- Socket type
     'HDMI, 3x DisplayPort', -- Ports
     1000, -- Weight in grams
-    699.99 -- Price in your currency
+    699.99 -- Price
 );
+INSERT INTO Parts (CategoryID) VALUES (4001);
+SELECT LAST_INSERT_ID();
+
+INSERT INTO GPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    MemorySize, 
+    MemoryType, 
+    ClockSpeed, 
+    Dimensions, 
+    PowerConsumption, 
+    Socket, 
+    Ports, 
+    Weightg, 
+    Price
+) VALUES (
+    2, -- retrieve from last parts ID
+    4001, -- GPU Category
+    'GeForce RTX 3070', -- Part Name
+    4050, -- Manufacturer ID for NVIDIA
+    '8GB', -- Memory Size
+    'GDDR6', -- Memory Type
+    '1.73GHz', -- Clock Speed
+    '242mm x 112mm x 50mm', -- Dimensions
+    220, -- Power Consumption in watts
+    'PCI Express 4.0', -- Socket type
+    'HDMI, 3x DisplayPort', -- Ports
+    900, -- Weight in grams
+    499.99 -- Price
+);
+
+SELECT LAST_INSERT_ID();
+INSERT INTO GPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    MemorySize, 
+    MemoryType, 
+    ClockSpeed, 
+    Dimensions, 
+    PowerConsumption, 
+    Socket, 
+    Ports, 
+    Weightg, 
+    Price
+) VALUES (
+    3, -- Next PartsID
+    4001, -- GPU Category
+    'GeForce GTX 1660 Super', -- Part Name
+    4050, -- Manufacturer ID for NVIDIA
+    '6GB', -- Memory Size
+    'GDDR6', -- Memory Type
+    '1.80GHz', -- Clock Speed
+    '229mm x 111mm x 35mm', -- Dimensions
+    125, -- Power Consumption in watts
+    'PCI Express 3.0', -- Socket type
+    'HDMI, DisplayPort, DVI-D', -- Ports
+    800, -- Weight in grams
+    229.99 -- Price
+);
+
+
