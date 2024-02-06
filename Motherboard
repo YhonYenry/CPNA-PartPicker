@@ -1,0 +1,74 @@
+INSERT INTO Manufacturer (ManufacturerName) VALUES ('ASUS');
+INSERT INTO Manufacturer (ManufacturerName) VALUES ('MSI');
+INSERT INTO Manufacturer (ManufacturerName) VALUES ('Gigabyte');
+INSERT INTO Category (CategoryName) VALUES ('Motherboard');
+
+
+INSERT INTO MotherBoard (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    MemoryType, 
+    MemoryMax, 
+    BoardSize, 
+    CPUSocket, 
+    M2Slots, 
+    RamSlots, 
+    Ethernet, 
+    USBSlots, 
+    Weightg, 
+    PowerConsumption, 
+    Price
+) VALUES
+(
+    1, -- PartsID
+    4002, -- CategoryID for Motherboards
+    'ASUS ROG Maximus XII', -- PartName
+    4052, -- ManufacturerID (example: 4052 for ASUS)
+    'DDR4', -- MemoryType
+    '128GB', -- MemoryMax
+    'ATX', -- BoardSize
+    'LGA 1200', -- CPUSocket
+    3, -- M2Slots
+    4, -- RamSlots
+    1, -- Ethernet (1 for yes, 0 for no)
+    6, -- USBSlots
+    1200, -- Weight in grams
+    30, -- Power Consumption in watts
+    499.99 -- Price
+),
+(
+    2, -- PartsID
+    4002, -- CategoryID for Motherboards
+    'MSI MPG Z490 Gaming Edge', -- PartName
+    4053, -- ManufacturerID (example: 4053 for MSI)
+    'DDR4', -- MemoryType
+    '128GB', -- MemoryMax
+    'ATX', -- BoardSize
+    'LGA 1200', -- CPUSocket
+    2, -- M2Slots
+    4, -- RamSlots
+    1, -- Ethernet
+    8, -- USBSlots
+    1000, -- Weight in grams
+    25, -- Power Consumption in watts
+    219.99 -- Price
+),
+(
+    3, -- PartsID
+    4002, -- CategoryID for Motherboards
+    'Gigabyte B450 Aorus Pro', -- PartName
+    4054, -- ManufacturerID (example: 4054 for Gigabyte)
+    'DDR4', -- MemoryType
+    '64GB', -- MemoryMax
+    'ATX', -- BoardSize
+    'AM4', -- CPUSocket
+    2, -- M2Slots
+    4, -- RamSlots
+    1, -- Ethernet
+    6, -- USBSlots
+    850, -- Weight in grams
+    20, -- Power Consumption in watts
+    129.99 -- Price
+);
