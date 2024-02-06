@@ -66,4 +66,42 @@ INSERT INTO GPU (
     229.99 -- Price
 );
 
+INSERT INTO Manufacturer (ManufacturerName) VALUES ('AMD');
+SELECT LAST_INSERT_ID();
+INSERT INTO Parts (CategoryID) VALUES (4001); -- 4001 is for GPUs
+SELECT LAST_INSERT_ID();
+INSERT INTO GPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    MemorySize, 
+    MemoryType, 
+    ClockSpeed, 
+    Dimensions, 
+    PowerConsumption, 
+    Socket, 
+    Ports, 
+    Weightg, 
+    Price
+) VALUES (
+    4, -- Newest PartsID
+    4001, -- GPU Category
+    'Radeon RX 6800 XT', -- Part Name
+    4051, -- Manufacturer ID for AMD
+    '16GB', -- Memory Size
+    'GDDR6', -- Memory Type
+    '2.1GHz', -- Clock Speed
+    '267mm x 120mm x 50mm', -- Dimensions
+    300, -- Power Consumption in watts
+    'PCI Express 4.0', -- Socket type
+    'HDMI, 2x DisplayPort', -- Ports
+    750, -- Weight in grams
+    649.99 -- Price
+);
+
+SELECT * FROM GPU;
+SELECT PartName, MemorySize, Price FROM GPU;
+SELECT * FROM GPU WHERE ManufacturerID = 4050;
+
 
