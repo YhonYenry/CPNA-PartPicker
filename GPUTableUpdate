@@ -1,0 +1,33 @@
+INSERT INTO Category (CategoryID, CategoryName) VALUES (4001, 'GPU');
+INSERT INTO Manufacturer (ManufacturerID, ManufacturerName) VALUES (4050, 'NVIDIA');
+
+
+INSERT INTO GPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    MemorySize, 
+    MemoryType, 
+    ClockSpeed, 
+    Dimensions, 
+    PowerConsumption, 
+    Socket, 
+    Ports, 
+    Weightg, 
+    Price
+) VALUES (
+    405, -- Assuming 405 is a valid PartsID
+    4001, -- CategoryID for GPU
+    'GeForce RTX 3080', -- Name of the part
+    4050, -- ManufacturerID for NVIDIA
+    '10GB', -- MemorySize
+    'GDDR6X', -- MemoryType
+    '1.71GHz', -- ClockSpeed
+    '285mm x 112mm x 40mm', -- Dimensions
+    320, -- PowerConsumption in watts
+    'PCI Express 4.0', -- Socket type
+    'HDMI, 3x DisplayPort', -- Ports
+    1000, -- Weight in grams
+    699.99 -- Price in your currency
+);
