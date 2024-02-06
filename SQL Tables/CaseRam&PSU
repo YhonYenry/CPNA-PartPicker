@@ -1,0 +1,39 @@
+CREATE TABLE PC_Cases (
+    PartsID int,
+    CategoryID int,
+    PartName varchar(30) NOT NULL,
+    ManufacturerID int,
+    FormFactor varchar(20) NOT NULL,
+    Dimensions varchar(20) NOT NULL,
+    MotherboardCompatibility varchar(30) NOT NULL,
+    PowerSupplyIncluded varchar(5),
+    ExternalBays varchar(30),
+    InternalBays varchar(30),
+    Weightg int NOT NULL,
+    Price decimal(20,2)
+);
+CREATE TABLE Power_Supplies (
+    PartsID int,
+    CategoryID int,
+    PartName varchar(30) NOT NULL,
+    ManufacturerID int,
+    PowerOutput varchar(20) NOT NULL,
+    EfficiencyRating varchar(20),
+    Modular varchar(20),
+    Dimensions varchar(20) NOT NULL,
+    ConnectorType varchar(50),
+    Price decimal(20,2)
+);
+CREATE TABLE RAM (
+    PartsID int,
+    CategoryID int,
+    PartName varchar(30) NOT NULL,
+    ManufacturerID int,
+    MemorySize varchar(20) NOT NULL,
+    MemoryType varchar(20) NOT NULL,
+    Speed varchar(20) NOT NULL,
+    Modules varchar(20) NOT NULL,
+    CASLatency varchar(20),
+    Voltage varchar(20),
+    Price decimal(20,2)
+);
