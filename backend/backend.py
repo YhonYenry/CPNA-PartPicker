@@ -283,6 +283,212 @@ def openSystemBuilder():
     current_user = get_jwt_identity()
     return render_template('/systemBuilder/systemBuilder.html', logged_in_as=current_user)
 
+# Queries for selecting compatible components
+# Compatibility scripts defined here
+
+# Case Query - Selects all cases
+@app.route('/api/getCases', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getCases():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Create MySQL connection
+    db_connection = mysql.connector.connect(**mysql_config)
+    db_cursor = db_connection.cursor(dictionary=True)  
+
+    # Select all cases as it is the first component with no compatibility checks
+    get_cases_query = "SELECT * FROM PC_Cases"
+    db_cursor.execute(get_cases_query)
+    cases = db_cursor.fetchall()
+
+    # Close MySQL connection
+    db_cursor.close()
+    db_connection.close()
+
+    # Check if cases is empty
+    if cases:
+        # Format Cases to be rendered
+        case_options_html = "<option>Select Case</option>"
+
+        for case in cases:
+            case_options_html +="<option value='" + str(case['CategoryID']) +  "'data-price='" + str(case['Price']) +"'>" + case['PartName'] + "</option>"
+    else:
+        case_options_html = "<option>No cases available</option>"
+    return case_options_html
+
+# Motherboard Query - Selects all motherboards with compatible case
+@app.route('/api/getMotherboards', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getMotherboards():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get case selection
+    case = request.args.get('case_selection')
+    print(case)
+
+    # Create MySQL connection
+    db_connection = mysql.connector.connect(**mysql_config)
+    db_cursor = db_connection.cursor(dictionary=True)  
+
+    # Get case specs from database
+    case_specs_query = "SELECT MotherboardCompatibility FROM PC_Cases WHERE CategoryID = %s"
+    db_cursor.execute(case_specs_query, (case,))
+    case_specs = db_cursor.fetchone()
+
+    # Extract the value of MotherboardCompatibility from case_specs
+    if case_specs:
+        case_board_size = case_specs['MotherboardCompatibility']
+    else:
+        # Case not found
+        case_board_size = None
+
+    # Query motherboards where BoardSize is equal to case_board_size
+    get_motherboards_query = "SELECT * FROM MotherBoard WHERE BoardSize = %s"
+    db_cursor.execute(get_motherboards_query, (case_board_size,))
+    motherboards = db_cursor.fetchall()
+
+    # Close MySQL connection
+    db_cursor.close()
+    db_connection.close()
+
+    if motherboards:
+        # Format Cases to be rendered
+        motherboard_options_html = "<option>Select Motherboard</option>"
+
+        for motherboard in motherboards:
+            motherboard_options_html +="<option value='" + str(motherboard['CategoryID']) + "'data-price='" + str(motherboard['Price']) + "'>" + motherboard['PartName'] + "</option>"
+    else:
+        motherboard_options_html = "<option>No compatible items</option>"
+
+    return motherboard_options_html
+
+# Processor Query - Selects all processors with compatible case and motherboard
+@app.route('/api/getProcessors', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getProcessors():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get case & motherboard selection
+    case = request.args.get('case_selection')
+    motherboard = request.args.get('motherboard_selection')
+
+    # Create MySQL connection
+    db_connection = mysql.connector.connect(**mysql_config)
+    db_cursor = db_connection.cursor(dictionary=True)  
+
+    # Get motherboard specs from database
+    motherboard_specs_query = "SELECT CPUSocket FROM MotherBoard WHERE CategoryID = %s"
+    db_cursor.execute(motherboard_specs_query, (motherboard,))
+    motherboard_specs = db_cursor.fetchone()
+    
+    # Get socket size
+    motherboard_socket = motherboard_specs['CPUSocket']
+
+    # Query processors where CPU
+    get_processors_query = "SELECT * FROM Processor WHERE CPUSocket = %s"
+
+    db_cursor.execute(get_processors_query, (motherboard_socket,))
+    processors = db_cursor.fetchall()
+
+    # Close MySQL connection
+    db_cursor.close()
+    db_connection.close()
+
+    if processors:
+        # Format Cases to be rendered
+        processor_options_html = "<option>Select Motherboard</option>"
+
+        for processor in processors:
+            processor_options_html +="<option id='" + str(processor['CategoryID']) + "'data-price='" + str(processor['Price']) + "'>" + processor['PartName'] + "</option>"
+    else:
+        processor_options_html = "<option>No compatible items</option>"
+
+    return processor_options_html
+
+# RAM Query - Selects all RAM with compatible case. motherboard, and processor
+@app.route('/api/getRAM', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getRAM():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get data from request
+    data = request.get_json()
+
+    # Get case, motherboard, and processor selection
+    case = data.get('case_selection')
+    motherboard = data.get('motherboard_selection')
+    processor = data.get('processor_selection')
+
+    return ram_options_html
+
+# GPU Query - Selects all GPU with compatible case, motherboard, processor, and RAM
+@app.route('/api/getGPU', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getGPU():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get data from request
+    data = request.get_json()
+
+    # Get case, motherboard, processor, and RAM selection
+    case = data.get('case_selection')
+    motherboard = data.get('motherboard_selection')
+    processor = data.get('processor_selection')
+    RAM = data.get('RAM_selection')
+
+    return gpu_options_html
+
+# CPU Cooler Query - Selects all Coolers with compatible case, motherboard, processor, RAM, and GPU
+@app.route('/api/getCoolers', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getCoolers():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get data from request
+    data = request.get_json()
+
+    # Get case, motherboard, processor, RAM, and GPU selection
+    case = data.get('case_selection')
+    motherboard = data.get('motherboard_selection')
+    processor = data.get('processor_selection')
+    RAM = data.get('RAM_selection')
+    GPU = data.get('GPU_selection')
+
+    return cooler_options_html
+
+# Power Supply Query - Selects all PSU with compatible case, motherboard, processor, RAM, GPU, and Cooler
+@app.route('/api/getPowerSupply', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getPowerSupply():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    # Get data from request
+    data = request.get_json()
+
+    # Get case, motherboard, processor, RAM, GPU, and cooler selection
+    case = data.get('case_selection')
+    motherboard = data.get('motherboard_selection')
+    processor = data.get('processor_selection')
+    RAM = data.get('RAM_selection')
+    GPU = data.get('GPU_selection')
+    cooler = data.get('cooler_selection')
+
+    return power_supply_options_html
+
 # Component List
 @app.route('/api/componentList', methods=['GET'])
 @jwt_required()
