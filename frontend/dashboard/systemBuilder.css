@@ -22,6 +22,10 @@ th {
     text-align: left;
 }
 
+select {
+    min-width: 150px;
+}
+
 #component-table tr {
     border-bottom: 1px solid black;
 }
@@ -54,14 +58,38 @@ th {
     justify-content: center;
 }
 
+#back-button {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
 #component-table {
     background-color: #555;
     width: 80vw;
-    margin-top: 16px;
+    margin-top: 8px;
     border-radius: 10px;
+    padding-bottom: 8px;
 }
 
 .content-title {
     text-align: center;
     margin-top: 8px;
+}
+
+#motherboard-row,
+#processor-row,
+#RAM-row,
+#GPU-row,
+#cooler-row,
+#power-supply-row,
+#submit-buttom-row {
+    display: none;
+}
+
+#submit-build-button {
+    text-align: center;
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
 }
