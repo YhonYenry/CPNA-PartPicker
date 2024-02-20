@@ -62,7 +62,7 @@ th {
 }
 
 #dashboard {
-    width: 100vw;
+    width: 100%;
     background-color: #b3b3b3;
     color: white;
     display: flex;
@@ -83,13 +83,18 @@ th {
     border-top: 1px solid black;
 }
 
-#history-table-container {
+#back-button {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
+#component-list-container {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-#history-table {
+#component-table {
     background-color: #555;
     width: 80%;
     margin-top: 8px;

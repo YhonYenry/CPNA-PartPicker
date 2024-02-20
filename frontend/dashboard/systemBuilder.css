@@ -26,12 +26,47 @@ select {
     min-width: 150px;
 }
 
+#left-dashboard {
+    width: 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: width 0.3s ease;
+    background-color: #555;
+}
+
+#right-dashboard {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #b3b3b3;
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+.dashboard-button {
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.dashboard-button-description {
+    padding-left: 5px;
+    display: none;
+}
+
 #component-table tr {
     border-bottom: 1px solid black;
 }
 
 #dashboard {
-    width: 100vw;
+    width: 100%;
     background-color: #b3b3b3;
     color: white;
     display: flex;
@@ -48,24 +83,20 @@ select {
     width: 100%;
     height: 96vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border-top: 1px solid black;
 }
 
 #component-table-container {
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
-#back-button {
-    margin-left: 10px;
-    margin-top: 8px;
-}
 
 #component-table {
     background-color: #555;
-    width: 80vw;
+    width: 80%;
     margin-top: 8px;
     border-radius: 10px;
     padding-bottom: 8px;

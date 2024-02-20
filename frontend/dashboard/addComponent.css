@@ -22,6 +22,18 @@ th {
     text-align: left;
 }
 
+#component-table tr {
+    border-bottom: 1px solid black;
+}
+
+#dashboard {
+    width: 100vw;
+    background-color: #b3b3b3;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
 #left-dashboard {
     width: 32px;
     display: flex;
@@ -57,17 +69,6 @@ th {
     display: none;
 }
 
-#component-table tr {
-    border-bottom: 1px solid black;
-}
-
-#dashboard {
-    width: 100vw;
-    background-color: #b3b3b3;
-    color: white;
-    display: flex;
-    flex-direction: column;
-}
 
 #title {
     background-color: black;
@@ -83,13 +84,18 @@ th {
     border-top: 1px solid black;
 }
 
-#history-table-container {
+#back-button {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
+#add-component-form-container {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-#history-table {
+#add-component-form {
     background-color: #555;
     width: 80%;
     margin-top: 8px;

@@ -16,23 +16,60 @@
             <div id="title">
                 <h2>Build History</h2>
             </div>
-            <button onclick="fetchDashboard()"> Return to Dashboard</button>
             <div id="main-content">
-                <div id="back-button">
+                <div id="left-dashboard">
+                    <div id="return-dashboard" onclick="fetchDashboard()" class="dashboard-button">
+                        <img src="./icons/dashboard-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Dashboard
+                        </div>
+                    </div>
+                    <div id="create-build" onclick="openCreateBuild()" class="dashboard-button">
+                        <img src="./icons/build-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Build New System
+                        </div>
+                    </div>
+                    <div id="component-search" onclick="openComponentList()" class="dashboard-button">
+                        <img src="./icons/component-list-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Component List
+                        </div>
+                    </div>
+                    <div id="add-component" onclick="openAddComponent()" class="dashboard-button">
+                        <img src="./icons/add-component-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Add Component
+                        </div>
+                    </div>
+                    <div id="Build History" onclick="openBuildHistory()" class=" dashboard-button">
+                        <img src="./icons/history-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Build History
+                        </div>
+                    </div>
+                    <div id="sign-out" onclick="clearCookie()" class="dashboard-button">
+                        <img src="./icons/sign-out-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Sign out
+                        </div>
 
+                    </div>
                 </div>
-                <div id="component-table-container">
-                    <table id="component-table">
-                        <thead>
-                            <tr>
-                                <th>Order #</th>
-                                <th>Date</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                <div id="right-dashboard">
+                    <div id="history-table-container">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

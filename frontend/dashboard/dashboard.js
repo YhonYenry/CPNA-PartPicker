@@ -1,33 +1,54 @@
-document.addEventListener('DOMContentLoaded', function () {
-    fetchDashboard();
+document.addEventListener('DOMContentLoaded', async function () {
+    await fetchDashboard();
 });
 
-function fetchDashboard() {
+function attachEventListeners() {
+    const leftDashboard = document.getElementById('left-dashboard');
+
+    leftDashboard.addEventListener('mouseover', () => {
+        document.querySelectorAll('.dashboard-button-description').forEach(description => {
+            description.style.display = 'flex';
+        });
+        leftDashboard.style.width = '200px';
+    });
+
+    leftDashboard.addEventListener('mouseout', () => {
+        document.querySelectorAll('.dashboard-button-description').forEach(description => {
+            description.style.display = 'none';
+        });
+        leftDashboard.style.width = '';
+    });
+}
+
+async function fetchDashboard() {
     const authToken = getCookie('authToken');
 
-    fetch('http://partcheck.online:5000/api/dashboard', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            console.log(response);
-            if (!response.ok) {
-                window.location.href = "http://partcheck.online:8080";
+    try {
+        const response = await fetch('http://partcheck.online:5000/api/dashboard', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
             }
-            return response.text();
-        })
-        .then(htmlContent => {
-            console.log(htmlContent);
-            document.documentElement.innerHTML = htmlContent;
-            return 200;
-        })
-        .catch(error => {
-            window.location.href = "http://partcheck.online:8080";
         });
+
+        console.log(response);
+
+        if (!response.ok) {
+            window.location.href = "http://partcheck.online:8080";
+        }
+
+        const htmlContent = await response.text();
+        console.log(htmlContent);
+        document.documentElement.innerHTML = htmlContent;
+        attachEventListeners();
+        return 200;
+    } catch (error) {
+        console.error(error);
+        window.location.href = "http://partcheck.online:8080";
+    }
 }
+
 
 function openCreateBuild() {
     const authToken = getCookie('authToken');
@@ -49,6 +70,7 @@ function openCreateBuild() {
         .then(htmlContent => {
             console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
+            attachEventListeners();
             return 200;
         })
         .catch(error => {
@@ -76,6 +98,7 @@ function openComponentList() {
         .then(htmlContent => {
             console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
+            attachEventListeners();
             return 200;
         })
         .catch(error => {
@@ -103,6 +126,7 @@ function openAddComponent() {
         .then(htmlContent => {
             console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
+            attachEventListeners();
             return 200;
         })
         .catch(error => {
@@ -130,6 +154,7 @@ function openBuildHistory() {
         .then(htmlContent => {
             console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
+            attachEventListeners();
             return 200;
         })
         .catch(error => {
@@ -156,3 +181,4 @@ function clearCookie() {
     document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     window.location.href = 'http://partcheck.online:8080';
 }
+
