@@ -1,0 +1,109 @@
+CREATE TABLE CPU (
+    PartsID INT,
+    CategoryID INT,
+    PartName VARCHAR(255),
+    ManufacturerID INT,
+    CoreCount INT,
+    ThreadCount INT,
+    BaseClockSpeed VARCHAR(255),
+    MaxTurboSpeed VARCHAR(255),
+    PowerConsumption INT,
+    SocketType VARCHAR(255),
+    IntegratedGraphics VARCHAR(255),
+    CacheSize VARCHAR(255),
+    Price DECIMAL(10, 2),
+    PRIMARY KEY (PartsID),
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID),
+    FOREIGN KEY (ManufacturerID) REFERENCES Manufacturer(ManufacturerID)
+);
+-- Assuming ManufacturerID for Intel is 4052 and CategoryID for CPU is 4002
+INSERT INTO CPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    CoreCount, 
+    ThreadCount, 
+    BaseClockSpeed, 
+    MaxTurboSpeed, 
+    PowerConsumption, 
+    SocketType, 
+    IntegratedGraphics, 
+    CacheSize, 
+    Price
+) VALUES (
+    1, -- PartsID for this CPU
+    4002, -- CategoryID for CPUs
+    'Intel Core i7-10700K', -- Part Name
+    4052, -- Manufacturer ID for Intel
+    8, -- Core Count
+    16, -- Thread Count
+    '3.8GHz', -- Base Clock Speed
+    '5.1GHz', -- Max Turbo Speed
+    125, -- Power Consumption in watts
+    'LGA1200', -- Socket Type
+    'Intel UHD Graphics 630', -- Integrated Graphics
+    '16MB', -- Cache Size
+    349.99 -- Price
+);
+-- Assuming ManufacturerID for AMD is 4053
+INSERT INTO CPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    CoreCount, 
+    ThreadCount, 
+    BaseClockSpeed, 
+    MaxTurboSpeed, 
+    PowerConsumption, 
+    SocketType, 
+    IntegratedGraphics, 
+    CacheSize, 
+    Price
+) VALUES (
+    2, -- PartsID for this AMD CPU
+    4002, -- CategoryID for CPUs
+    'AMD Ryzen 9 3900X', -- Part Name
+    4053, -- Manufacturer ID for AMD
+    12, -- Core Count
+    24, -- Thread Count
+    '3.8GHz', -- Base Clock Speed
+    '4.6GHz', -- Max Turbo Speed
+    105, -- Power Consumption in watts
+    'AM4', -- Socket Type
+    'None', -- Integrated Graphics
+    '64MB', -- Cache Size
+    499.99 -- Price
+);
+-- Using the same ManufacturerID for Intel as before (4052)
+INSERT INTO CPU (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    CoreCount, 
+    ThreadCount, 
+    BaseClockSpeed, 
+    MaxTurboSpeed, 
+    PowerConsumption, 
+    SocketType, 
+    IntegratedGraphics, 
+    CacheSize, 
+    Price
+) VALUES (
+    3, -- PartsID for this Intel CPU
+    4002, -- CategoryID for CPUs
+    'Intel Core i5-10600K', -- Part Name
+    4052, -- Manufacturer ID for Intel
+    6, -- Core Count
+    12, -- Thread Count
+    '4.1GHz', -- Base Clock Speed
+    '4.8GHz', -- Max Turbo Speed
+    125, -- Power Consumption in watts
+    'LGA1200', -- Socket Type
+    'Intel UHD Graphics 630', -- Integrated Graphics
+    '12MB', -- Cache Size
+    262.99 -- Price
+);
+
