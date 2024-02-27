@@ -37,3 +37,86 @@ CREATE TABLE RAM (
     Voltage varchar(20),
     Price decimal(20,2)
 );
+
+INSERT INTO PC_Cases (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    FormFactor, 
+    Dimensions, 
+    MotherboardCompatibility, 
+    PowerSupplyIncluded, 
+    ExternalBays, 
+    InternalBays, 
+    Weightg, 
+    Price
+) VALUES (
+    1, -- PartsID for this case
+    4004, -- CategoryID for PC Cases (assuming 4004 is the ID for PC Cases)
+    'NZXT H210', -- Part Name
+    4055, -- Manufacturer ID (assuming 4055 is the ID for NZXT)
+    'Mini-ITX', -- Form Factor
+    '210x349x372', -- Dimensions in mm
+    'Mini-ITX', -- Motherboard Compatibility
+    'No', -- Power Supply Included
+    'None', -- External Bays
+    '1x 3.5", 3x 2.5"', -- Internal Bays
+    6000, -- Weight in grams
+    79.99 -- Price in USD
+);
+INSERT INTO PC_Cases (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    FormFactor, 
+    Dimensions, 
+    MotherboardCompatibility, 
+    PowerSupplyIncluded, 
+    ExternalBays, 
+    InternalBays, 
+    Weightg, 
+    Price
+) VALUES (
+    2, -- PartsID for this case
+    4004, -- CategoryID for PC Cases (assuming 4004 is the ID for PC Cases)
+    'Corsair 4000D Airflow', -- Part Name
+    4056, -- Manufacturer ID (assuming 4056 is the ID for Corsair)
+    'ATX', -- Form Factor
+    '453x230x466', -- Dimensions in mm
+    'ATX, Micro-ATX, Mini-ITX', -- Motherboard Compatibility
+    'No', -- Power Supply Included
+    '2x 5.25"', -- External Bays
+    '2x 3.5", 2x 2.5"', -- Internal Bays
+    7700, -- Weight in grams
+    94.99 -- Price in USD
+);
+INSERT INTO PC_Cases (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    FormFactor, 
+    Dimensions, 
+    MotherboardCompatibility, 
+    PowerSupplyIncluded, 
+    ExternalBays, 
+    InternalBays, 
+    Weightg, 
+    Price
+) VALUES (
+    3, -- PartsID for this case
+    4004, -- CategoryID for PC Cases (assuming 4004 is the ID for PC Cases)
+    'Cooler Master MasterBox Q300L', -- Part Name
+    4057, -- Manufacturer ID (assuming 4057 is the ID for Cooler Master)
+    'Micro-ATX', -- Form Factor
+    '387x230x381', -- Dimensions in mm
+    'Micro-ATX, Mini-ITX', -- Motherboard Compatibility
+    'No', -- Power Supply Included
+    '1x 5.25"', -- External Bays
+    '1x 3.5", 2x 2.5"', -- Internal Bays
+    3800, -- Weight in grams
+    49.99 -- Price in USD
+);
+
