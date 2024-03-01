@@ -1,0 +1,84 @@
+CREATE TABLE CPUCoolers (
+    CoolerID INT AUTO_INCREMENT PRIMARY KEY,
+    CoolerName VARCHAR(255) NOT NULL,
+    ManufacturerID INT,
+    CompatibleSockets VARCHAR(255) NOT NULL, -- List of compatible CPU sockets
+    CoolerType VARCHAR(255), -- e.g., Air, Liquid
+    FanRPM VARCHAR(255), -- Range of fan speeds
+    NoiseLevel DECIMAL(5, 2), -- Noise level in decibels
+    Dimensions VARCHAR(255), -- Dimensions of the cooler
+    Weightg INT, -- Weight in grams
+    Price DECIMAL(10, 2) -- Price of the cooler
+);
+
+-- Establish a foreign key relationship with the Manufacturers table
+ALTER TABLE CPUCoolers
+ADD FOREIGN KEY (ManufacturerID) REFERENCES Manufacturer(ManufacturerID);
+
+INSERT INTO Manufacturer (ManufacturerName) VALUES ('Cooler Master');
+SELECT ManufacturerID FROM Manufacturer WHERE ManufacturerName = 'Cooler Master';
+
+INSERT INTO CPUCoolers (
+    CoolerName, 
+    ManufacturerID, 
+    CompatibleSockets, 
+    CoolerType, 
+    FanRPM, 
+    NoiseLevel, 
+    Dimensions, 
+    Weightg, 
+    Price
+) VALUES (
+    'Wraith Prism', -- Cooler Name
+    4051, -- Manufacturer ID for AMD
+    'AM4, TR4', -- Compatible Sockets
+    'Air', -- Cooler Type
+    '1800-3600 RPM', -- Fan RPM
+    38, -- Noise Level in decibels
+    '136mm x 159mm x 96mm', -- Dimensions
+    580, -- Weight in grams
+    49.99 -- Price
+);
+INSERT INTO CPUCoolers (
+    CoolerName, 
+    ManufacturerID, 
+    CompatibleSockets, 
+    CoolerType, 
+    FanRPM, 
+    NoiseLevel, 
+    Dimensions, 
+    Weightg, 
+    Price
+) VALUES (
+    'Hyper 212 EVO', -- Cooler Name
+    4052, -- Manufacturer ID for Cooler Master
+    'LGA1151, AM4, TR4', -- Compatible Sockets
+    'Air', -- Cooler Type
+    '600-2000 RPM', -- Fan RPM
+    36, -- Noise Level in decibels
+    '120mm x 79mm x 159mm', -- Dimensions
+    465, -- Weight in grams
+    34.99 -- Price
+);
+INSERT INTO CPUCoolers (
+    CoolerName, 
+    ManufacturerID, 
+    CompatibleSockets, 
+    CoolerType, 
+    FanRPM, 
+    NoiseLevel, 
+    Dimensions, 
+    Weightg, 
+    Price
+) VALUES (
+    'NVIDIA Frostbite 200', -- Cooler Name
+    4050, -- Manufacturer ID for NVIDIA
+    'LGA1151, AM4, LGA2066', -- Compatible Sockets
+    'Liquid', -- Cooler Type
+    '1500-2500 RPM', -- Fan RPM
+    30, -- Noise Level in decibels
+    '280mm x 120mm x 27mm', -- Dimensions (Radiator size for liquid cooler)
+    1200, -- Weight in grams
+    149.99 -- Price
+);
+
