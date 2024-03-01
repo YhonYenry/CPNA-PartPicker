@@ -119,4 +119,34 @@ INSERT INTO PC_Cases (
     3800, -- Weight in grams
     49.99 -- Price in USD
 );
+INSERT INTO Parts (CategoryID) VALUES ([CategoryID for Power Supplies]);
+SELECT LAST_INSERT_ID();
+
+-- Insert a new part with CategoryID 4006
+INSERT INTO Parts (CategoryID) VALUES (4006);
+
+-- Insert the power supply details into the Power_Supplies table
+INSERT INTO Power_Supplies (
+    PartsID, 
+    CategoryID, 
+    PartName, 
+    ManufacturerID, 
+    PowerOutput, 
+    EfficiencyRating, 
+    Modular, 
+    Dimensions, 
+    ConnectorType, 
+    Price
+) VALUES (
+    7, -- Hardcoded PartsID
+    4006, -- Hardcoded CategoryID for power supplies
+    'AMD PowerMaster 850W', -- Part Name
+    (SELECT ManufacturerID FROM Manufacturer WHERE ManufacturerName = 'AMD'), -- Subquery to get Manufacturer ID for AMD
+    '850W', -- Power Output
+    '80 Plus Silver', -- Efficiency Rating
+    'Fully Modular', -- Modular
+    '160mm x 86mm x 150mm', -- Dimensions
+    '1x 24-Pin, 1x 8-Pin EPS, 4x 6+2 Pin PCIe, 8x SATA, 4x Molex', -- Connector Type
+    199.99 -- Price
+);
 
