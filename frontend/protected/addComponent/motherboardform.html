@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotherboardForm</title>
+</head>
+<body>
+    <form action = '/submit_motherboard' mothod='POST' id="motherboard_form" onsubmit="return validateForm()">
+        
+        <div>
+            <label>Motherboard Name</label>
+            <inpudt type="text" name = "case_name" required>
+        </div>
+        <div>
+            <label>Parts ID</label>
+            <input type="text" parts = "part_id" required>
+        </div>
+        <div>
+            <label>Category ID</label>
+            <input type="text" category = "category_id" required>
+        </div>
+        <div>
+            <label>Manufacturer ID</label>
+            <input type="text" manufacturer = "manufacturer" required>
+        </div>
+        <div>
+            <label>Memory Type </label>
+            <input type="text" memory = "memory_type" required>
+        </div>
+        <div>
+            <label>Board Size</label>
+            <input type="text" boardsize = "board_size" required>
+        </div>
+        <div>
+            <label>CPU Socket</label>
+            <input type="text" cpusocket = "cpu_socket" required>
+        </div>
+        <div>
+            <label>M2 Slots</label>
+            <input type="text" m2slots = "m2_slots" required>
+        </div>
+        <div>
+            <label>Ram Slots</label>
+            <input type="text" ramslots = "ram_slots" required>
+        </div>
+        <div>
+            <label>Ethernet</label>
+            <input type="text" ehternet = "ethernet" required>
+        </div>
+        <div>
+            <label>USB Slots</label>
+            <input type="text" price = "price" required>
+        </div>
+        <div>
+            <label>Weight</label>
+            <input type="text" weight = "weight" required>
+        </div>
+        <div>
+            <label>Power Consumption</label>
+            <input type="text" power = "power_consumption" required>
+        </div>
+        <div>
+            <label>Price</label>
+            <input type="text" price = "price" required>
+        </div>
+
+
+        <button type="submit"type> Submit</button>
+    </form>
+</body>
+</html>

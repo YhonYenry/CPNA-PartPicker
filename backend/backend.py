@@ -1,22 +1,17 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from flask_jwt_extended import JWTManager,create_access_token, jwt_required, get_jwt_identity # Auth Tokens
 from flask_cors import CORS, cross_origin # Requests to other domains
-from datetime import datetime, timedelta
-import mysql.connector # Database Connections
-import bcrypt # Password Hashing
-import os
-from sendgrid import SendGridAPIClient # Send email
-from sendgrid.helpers.mail import Mail # Send email
-import secrets # Random number generator
-import string
+
+# modular function declarations
+from sign_up_api.sign_up import signup
+from sign_in_api.login import login
+from reset_password_api.reset_password import send_reset_password, reset_password
+from system_builder_api.system_builder import getCases, getMotherboards, getProcessors, getRAM, getGPU, getCoolers, getPowerSupply
 
 app = Flask(__name__, template_folder='../frontend/protected')
 app.config['JWT_SECRET_KEY'] = '0376911010287a8b6ee74124123705a2'
 CORS(app, resources={r"/api/*": {"origins": "http://partcheck.online:8080"}})
 jwt = JWTManager(app)
-
-SENDGRID_API_KEY = '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'
-sg = SendGridAPIClient(SENDGRID_API_KEY)
 
 
 # Database connection
@@ -28,228 +23,36 @@ mysql_config = {
 }
 
 
+# API Routes
 
 @app.route('/api/login', methods=['POST'])
-def api_login():
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get data from request
+def login_route():
     data = request.get_json()
-
-    # Get username and password from data
-    username = data.get('username')
-    password = data.get('password')
-
-    # Query database for user
-    check_user_query = "SELECT * FROM users WHERE username = %s"
-    db_cursor.execute(check_user_query, (username,))
-    user = db_cursor.fetchone()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    print("Query complete")
-    if user:
-        # Username exists in database, check password
-        if  bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-            expiration_time = timedelta(minutes=30)
-            access_token = create_access_token(identity=username, expires_delta=expiration_time)
-            return jsonify(access_token=access_token), 200
-        else:
-            return jsonify({"msg": "pswd_err"}), 200
-    else:
-        return jsonify({"msg": "user_err"}), 200
+    response = login(mysql_config, data)
+    return response
 
 
 
 @app.route('/api/signup', methods=['POST'])
-def signup():
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get data from request
+def signup_route():
     data = request.get_json()
-
-    # Get username and password from data
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-
-    # Check if username exists
-    check_user_query = "SELECT * FROM users WHERE username = %s"
-    db_cursor.execute(check_user_query, (username,))
-    user_check = db_cursor.fetchone()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    if user_check:
-        # Username exists in database, send error message
-        return jsonify({"msg": "user_err"}), 200
-        
-    else:
-        # Create MySQL connection
-        db_connection = mysql.connector.connect(**mysql_config)
-        db_cursor = db_connection.cursor(dictionary=True)  
-
-        # Check if email exists
-        check_email_query = "SELECT * FROM users WHERE email = %s"
-        db_cursor.execute(check_email_query, (email,))
-        email_check = db_cursor.fetchone()
-
-        # Close MySQL connection
-        db_cursor.close()
-        db_connection.close()
-
-        if email_check:
-            # Email exists in database, send error message
-            return jsonify({"msg": "email_err"}), 200
-
-        else:
-            # Create MySQL connection
-            db_connection = mysql.connector.connect(**mysql_config)
-            db_cursor = db_connection.cursor(dictionary=True)  
-
-            # Username and email are available, hash password and create user account
-            add_user_query = "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)"
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            db_cursor.execute(add_user_query, (username, email, hashed_password))
-            db_connection.commit()
-
-            # Close MySQL connection
-            db_cursor.close()
-            db_connection.close()
-            return jsonify({"msg": "user_created"}), 200
+    response = signup(mysql_config, data)
+    return response
 
 
 @app.route('/api/send-password-reset', methods=['POST'])
-def send_password_reset():
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get data from request
+def send_password_reset_route():
     data = request.get_json()
-    # Get email from data
-    email = data.get('email')
-
-    # Check if user exists with given email
-    check_email_query = "SELECT * FROM users WHERE email = %s"
-    db_cursor.execute(check_email_query, (email,))
-    user = db_cursor.fetchone()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    if user:
-        # Email was found, send reset request
-        message = Mail(
-            from_email='partcheckemail@gmail.com',
-            to_emails=email)
-        message.template_id = 'd-765e74f049414300b497195e1daf1fed'
-
-        # Generate one time password
-        alphabet = string.ascii_letters + string.digits
-        otp = ''.join(secrets.choice(alphabet) for _ in range(6))
-
-        
-
-        message_data = {
-            'OTP': otp
-        }
-
-        message.dynamic_template_data = message_data
-        try:
-            # Create MySQL connection
-            db_connection = mysql.connector.connect(**mysql_config)
-            db_cursor = db_connection.cursor(dictionary=True)  
-
-            # Store one time password in database
-            otp_expiration_time = datetime.now() + timedelta(minutes=5)
-            update_otp_query = "UPDATE users SET otp = %s, otp_expiration = %s where email = %s"
-
-            db_cursor.execute(update_otp_query, (otp, otp_expiration_time, email))
-            db_connection.commit()
-
-            # Close MySQL connection
-            db_cursor.close()
-            db_connection.close()
-
-            # Send the email
-            response = sg.send(message)
-
-            return jsonify({"msg": "msg_sent"}), 200
-        except Exception as e:
-            # Error sending message
-            print("Error:", e)
-            return jsonify({"msg": "try_again"}), 200
-    else:
-        # Email was not found
-        return jsonify({"msg": "not_found"}), 200
+    response = send_reset_password(mysql_config, data)
+    return response
 
 
 
 @app.route('/api/reset-password', methods=['POST'])
-def reset_password():
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get data from request
+def reset_password_route():
     data = request.get_json()
-
-    # Get email code and password from data
-    code = data.get('emailCode')
-    email = data.get('email')
-    password = data.get('password')
-
-    # Check if email code is valid and within time constraints
-    check_otp_query = "SELECT otp, otp_expiration FROM users WHERE email = %s"
-    db_cursor.execute(check_otp_query, (email,))
-    otp_query_result = db_cursor.fetchone()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    if otp_query_result:
-        # Get the OTP and its expiration from the database
-        otp = otp_query_result['otp']
-        otp_expiration = otp_query_result['otp_expiration']
-
-        # Check if the codes match
-        if otp == code:
-            if datetime.now() < otp_expiration:
-                # Create MySQL connection
-                db_connection = mysql.connector.connect(**mysql_config)
-                db_cursor = db_connection.cursor(dictionary=True)  
-
-                # Code is valid, reset password
-                hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-                update_password_query = "UPDATE users SET password = %s WHERE email = %s"
-                db_cursor.execute(update_password_query, (hashed_password, email))
-                db_connection.commit()
-
-                # Close MySQL connection
-                db_cursor.close()
-                db_connection.close()
-                return jsonify({"msg": "pswd_updated"}), 200
-            else:
-                # Code is expired
-                return jsonify({"msg": "time_err"}), 200
-        else:
-            # Code is incorrect
-            return jsonify({"msg": "code_err"}), 200
-    else:
-        # Unknown Error
-        return jsonify({"msg": "query_err"}), 200
-
+    response = reset_password(mysql_config, data)
+    return response
 
 
 @app.route('/api/checkAuth', methods=['GET'])
@@ -290,183 +93,62 @@ def openSystemBuilder():
 @app.route('/api/getCases', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getCases():
+def getCases_route():
     print("Checking auth")
     current_user = get_jwt_identity()
-
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Select all cases as it is the first component with no compatibility checks
-    get_cases_query = "SELECT * FROM PC_Cases"
-    db_cursor.execute(get_cases_query)
-    cases = db_cursor.fetchall()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    # Check if cases is empty
-    if cases:
-        # Format Cases to be rendered
-        case_options_html = "<option>Select Case</option>"
-
-        for case in cases:
-            case_options_html +="<option value='" + str(case['CategoryID']) +  "'data-price='" + str(case['Price']) +"'>" + case['PartName'] + "</option>"
-    else:
-        case_options_html = "<option>No cases available</option>"
-    return case_options_html
+    response = getCases(mysql_config, request)
+    return response
 
 # Motherboard Query - Selects all motherboards with compatible case
 @app.route('/api/getMotherboards', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getMotherboards():
+def getMotherboards_route():
     print("Checking auth")
     current_user = get_jwt_identity()
-
-    # Get case selection
-    case = request.args.get('case_selection')
-    print(case)
-
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get case specs from database
-    case_specs_query = "SELECT MotherboardCompatibility FROM PC_Cases WHERE CategoryID = %s"
-    db_cursor.execute(case_specs_query, (case,))
-    case_specs = db_cursor.fetchone()
-
-    # Extract the value of MotherboardCompatibility from case_specs
-    if case_specs:
-        case_board_size = case_specs['MotherboardCompatibility']
-    else:
-        # Case not found
-        case_board_size = None
-
-    # Query motherboards where BoardSize is equal to case_board_size
-    get_motherboards_query = "SELECT * FROM MotherBoard WHERE BoardSize = %s"
-    db_cursor.execute(get_motherboards_query, (case_board_size,))
-    motherboards = db_cursor.fetchall()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    if motherboards:
-        # Format Cases to be rendered
-        motherboard_options_html = "<option>Select Motherboard</option>"
-
-        for motherboard in motherboards:
-            motherboard_options_html +="<option value='" + str(motherboard['CategoryID']) + "'data-price='" + str(motherboard['Price']) + "'>" + motherboard['PartName'] + "</option>"
-    else:
-        motherboard_options_html = "<option>No compatible items</option>"
-
-    return motherboard_options_html
+    response = getMotherboards(mysql_config, request)
+    return response
 
 # Processor Query - Selects all processors with compatible case and motherboard
 @app.route('/api/getProcessors', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getProcessors():
-    print("Checking auth")
+def getProcessors_route():
     current_user = get_jwt_identity()
+    response = getProcessors(mysql_config, request)
+    return response
 
-    # Get case & motherboard selection
-    case = request.args.get('case_selection')
-    motherboard = request.args.get('motherboard_selection')
-
-    # Create MySQL connection
-    db_connection = mysql.connector.connect(**mysql_config)
-    db_cursor = db_connection.cursor(dictionary=True)  
-
-    # Get motherboard specs from database
-    motherboard_specs_query = "SELECT CPUSocket FROM MotherBoard WHERE CategoryID = %s"
-    db_cursor.execute(motherboard_specs_query, (motherboard,))
-    motherboard_specs = db_cursor.fetchone()
-    
-    # Get socket size
-    motherboard_socket = motherboard_specs['CPUSocket']
-
-    # Query processors where CPU
-    get_processors_query = "SELECT * FROM Processor WHERE CPUSocket = %s"
-
-    db_cursor.execute(get_processors_query, (motherboard_socket,))
-    processors = db_cursor.fetchall()
-
-    # Close MySQL connection
-    db_cursor.close()
-    db_connection.close()
-
-    if processors:
-        # Format Cases to be rendered
-        processor_options_html = "<option>Select Motherboard</option>"
-
-        for processor in processors:
-            processor_options_html +="<option id='" + str(processor['CategoryID']) + "'data-price='" + str(processor['Price']) + "'>" + processor['PartName'] + "</option>"
-    else:
-        processor_options_html = "<option>No compatible items</option>"
-
-    return processor_options_html
 
 # RAM Query - Selects all RAM with compatible case. motherboard, and processor
 @app.route('/api/getRAM', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getRAM():
+def getRAM_route():
     print("Checking auth")
     current_user = get_jwt_identity()
+    response = getRAM(mysql_config, request)
+    return response
 
-    # Get data from request
-    data = request.get_json()
-
-    # Get case, motherboard, and processor selection
-    case = data.get('case_selection')
-    motherboard = data.get('motherboard_selection')
-    processor = data.get('processor_selection')
-
-    return ram_options_html
 
 # GPU Query - Selects all GPU with compatible case, motherboard, processor, and RAM
 @app.route('/api/getGPU', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getGPU():
+def getGPU_route():
     print("Checking auth")
     current_user = get_jwt_identity()
-
-    # Get data from request
-    data = request.get_json()
-
-    # Get case, motherboard, processor, and RAM selection
-    case = data.get('case_selection')
-    motherboard = data.get('motherboard_selection')
-    processor = data.get('processor_selection')
-    RAM = data.get('RAM_selection')
-
-    return gpu_options_html
+    response = getGPU(mysql_config, request)
+    return response
 
 # CPU Cooler Query - Selects all Coolers with compatible case, motherboard, processor, RAM, and GPU
 @app.route('/api/getCoolers', methods=['GET'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def getCoolers():
+def getCoolers_route():
     print("Checking auth")
     current_user = get_jwt_identity()
-
-    # Get data from request
-    data = request.get_json()
-
-    # Get case, motherboard, processor, RAM, and GPU selection
-    case = data.get('case_selection')
-    motherboard = data.get('motherboard_selection')
-    processor = data.get('processor_selection')
-    RAM = data.get('RAM_selection')
-    GPU = data.get('GPU_selection')
-
-    return cooler_options_html
+    response = getCoolers(mysql_config, request)
+    return response
 
 # Power Supply Query - Selects all PSU with compatible case, motherboard, processor, RAM, GPU, and Cooler
 @app.route('/api/getPowerSupply', methods=['GET'])
@@ -475,19 +157,8 @@ def getCoolers():
 def getPowerSupply():
     print("Checking auth")
     current_user = get_jwt_identity()
-
-    # Get data from request
-    data = request.get_json()
-
-    # Get case, motherboard, processor, RAM, GPU, and cooler selection
-    case = data.get('case_selection')
-    motherboard = data.get('motherboard_selection')
-    processor = data.get('processor_selection')
-    RAM = data.get('RAM_selection')
-    GPU = data.get('GPU_selection')
-    cooler = data.get('cooler_selection')
-
-    return power_supply_options_html
+    response = getPowerSupply(mysql_config, request)
+    return response
 
 # Component List
 @app.route('/api/componentList', methods=['GET'])
@@ -507,6 +178,47 @@ def openAddComponent():
     current_user = get_jwt_identity()
     return render_template('/addComponent/addComponent.html', logged_in_as=current_user)
 
+
+@app.route('/submit_case')
+def case_form():
+        return render_template('caseform.html')
+#Add Case
+@app.route('/submit/component', methods=['POST'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def submit_case(): 
+    case_name = request.form['case_name']
+    part_id = request.form['part_id']
+    category_id = request.form['category_id']
+    manufacturer_id = request.form['manufacturer_id']
+    form_factor = request.form['form_factor']
+    dimensions = request.form['dimensions']
+    power_supply = 1 if 'power_supply' in request.form else 0
+    external_bays = request.form['external_bays']
+    internal_bays = request.form['internal_bays']
+    weight = request.form['weight']
+    price = request.form['price']
+
+    sql = "INSERT INTO your_table_name (case_name, part_id, category_id, manufacturer_id, form_factor, dimensions, power_supply, external_bays, internal_bays, weight, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    val = (case_name, part_id, category_id, manufacturer_id, form_factor, dimensions, power_supply, external_bays, internal_bays, weight, price)
+    cursor.execute(sql, val)
+    return 'Form Sucessfully Submitted'
+
+
+#Add Motherboard
+@app.route('/submit_motherboard', methods=['POST'])
+def motherboard_form(): 
+    return render_template('motherboardfrom.html')
+
+#@app.route('/submit/component', methods=['POST'])
+#@jwt_required()
+#@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+#def submit_motherboard():
+    
+
+
+
+
 # Component List
 @app.route('/api/buildHistory', methods=['GET'])
 @jwt_required()
@@ -519,3 +231,9 @@ def openBuildHistory():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+
+
+
+
+

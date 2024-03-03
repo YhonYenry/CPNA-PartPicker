@@ -122,6 +122,26 @@ async function getProcessors() {
             const htmlResponse = await response.text();
 
             document.getElementById('processor-options').innerHTML = htmlResponse;
+
+            // Event listener to display processor selection after motherboard selection is made
+            document.getElementById('processor-options').addEventListener('change', function () {
+                const RAM_Row = document.getElementById('RAM-row');
+                console.log("option selected!");
+
+                // Show or hide processor-row based on selected value
+                if (this.value !== 'default') {
+                    RAM_Row.style.display = 'table-row';
+                    var processorSelections = document.getElementById('processor-options');
+
+                    var selectedProcessor = processorSelections.options[processorSelections.selectedIndex];
+
+                    var processorPrice = selectedProcessor.getAttribute('data-price');
+                    document.getElementById('processor-price').innerHTML = "$" + processorPrice;
+
+                } else {
+                    RAM_Row.style.display = 'none';
+                }
+            });
         } else {
             // No motherboard has been selected yet, alert user
         }
@@ -150,11 +170,33 @@ async function getRAM() {
                 }
             });
 
+            console.log(response);
+
             if (!response.ok) {
                 throw new Error('Error in response!');
             }
 
             const htmlResponse = await response.text();
+
+            // Event listener to display processor selection after motherboard selection is made
+            document.getElementById('RAM-options').addEventListener('change', function () {
+                const GPU_Row = document.getElementById('GPU-row');
+                console.log("option selected!");
+
+                // Show or hide processor-row based on selected value
+                if (this.value !== 'default') {
+                    GPU_Row.style.display = 'table-row';
+                    var RAMSelections = document.getElementById('RAM-options');
+
+                    var selectedRAM = RAMSelections.options[RAMSelections.selectedIndex];
+
+                    var RAMPrice = selectedRAM.getAttribute('data-price');
+                    document.getElementById('RAM-price').innerHTML = "$" + RAMPrice;
+
+                } else {
+                    GPU_Row.style.display = 'none';
+                }
+            });
 
             document.getElementById('RAM-options').innerHTML = htmlResponse;
         } else {
@@ -193,6 +235,27 @@ async function getGPU() {
             const htmlResponse = await response.text();
 
             document.getElementById('GPU-options').innerHTML = htmlResponse;
+
+            // Event listener to display processor selection after motherboard selection is made
+            document.getElementById('GPU-options').addEventListener('change', function () {
+                const cooler_Row = document.getElementById('cooler-row');
+                console.log("option selected!");
+
+                // Show or hide processor-row based on selected value
+                if (this.value !== 'default') {
+                    cooler_Row.style.display = 'table-row';
+                    var GPUSelections = document.getElementById('GPU-options');
+
+                    var selectedGPU = GPUSelections.options[GPUSelections.selectedIndex];
+
+                    var GPUPrice = selectedGPU.getAttribute('data-price');
+                    document.getElementById('GPU-price').innerHTML = "$" + GPUPrice;
+
+                } else {
+                    cooler_Row.style.display = 'none';
+                }
+            });
+
         } else {
             // No RAM has been selected yet, alert user
         }
@@ -231,6 +294,26 @@ async function getCoolers() {
             const htmlResponse = await response.text();
 
             document.getElementById('cooler-options').innerHTML = htmlResponse;
+
+            // Event listener to display processor selection after motherboard selection is made
+            document.getElementById('cooler-options').addEventListener('change', function () {
+                const power_supply_row = document.getElementById('power-supply-row');
+                console.log("option selected!");
+
+                // Show or hide processor-row based on selected value
+                if (this.value !== 'default') {
+                    power_supply_row.style.display = 'table-row';
+                    var coolerSelections = document.getElementById('cooler-options');
+
+                    var selectedCooler = coolerSelections.options[coolerSelections.selectedIndex];
+
+                    var coolerPrice = selectedCooler.getAttribute('data-price');
+                    document.getElementById('cooler-price').innerHTML = "$" + coolerPrice;
+
+                } else {
+                    power_supply_row.style.display = 'none';
+                }
+            });
         } else {
             // No GPU has been selected yet, alert user
         }
@@ -251,11 +334,18 @@ async function getPowerSupplys() {
         const selectedGPU = document.getElementById('GPU-options').value;
         const selectedCooler = document.getElementById('cooler-options').value;
 
+        // Calculate power consumption of components
+        const motherboardPower = document.getElementById('motherboard-options').options[document.getElementById('motherboard-options').selectedIndex].getAttribute('data-power');
+        const CPUPower = document.getElementById('processor-options').options[document.getElementById('processor-options').selectedIndex].getAttribute('data-power');
+        const GPUPower = document.getElementById('GPU-options').options[document.getElementById('GPU-options').selectedIndex].getAttribute('data-power');
+        const totalPower = motherboardPower + CPUPower + GPUPower;
+        console.log(totalPower);
+
         // Check if previous selection has been made
         if (selectedCooler != "default") {
             // Send previous selections to backend to filter for compatible power supplys
             const authToken = getCookie('authToken');
-            const response = await fetch(`http://partcheck.online:5000/api/getPowerSupply?case_selection=${selectedCase}&motherboard_selection=${selectedMotherboard}&processor_selection=${selectedProcessor}&RAM_selection=${selectedRAM}&GPU_selection=${selectedGPU}&cooler_selection=${selectedCooler}`, {
+            const response = await fetch(`http://partcheck.online:5000/api/getPowerSupply?case_selection=${selectedCase}&power_consumption=${totalPower}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`,
@@ -270,6 +360,39 @@ async function getPowerSupplys() {
             const htmlResponse = await response.text();
 
             document.getElementById('power-supply-options').innerHTML = htmlResponse;
+
+            // Event listener to display processor selection after motherboard selection is made
+            document.getElementById('power-supply-options').addEventListener('change', function () {
+                const submit_button = document.getElementById('submit-buttom-row');
+                const total_price_row = document.getElementById('total-price-row');
+                console.log("option selected!");
+
+                // Show or hide processor-row based on selected value
+                if (this.value !== 'default') {
+                    var powerSupplySelections = document.getElementById('cooler-options');
+                    var selectedPowerSupply = powerSupplySelections.options[powerSupplySelections.selectedIndex];
+                    var powerSupplyPriceStr = selectedPowerSupply.getAttribute('data-price');
+                    document.getElementById('power-supply-price').innerHTML = "$" + powerSupplyPriceStr;
+
+                    // Calculate total price
+                    const casePrice = parseFloat(document.getElementById('case-options').options[document.getElementById('case-options').selectedIndex].getAttribute('data-price'));
+                    const motherboardPrice = parseFloat(document.getElementById('motherboard-options').options[document.getElementById('motherboard-options').selectedIndex].getAttribute('data-price'));
+                    const processorPrice = parseFloat(document.getElementById('processor-options').options[document.getElementById('processor-options').selectedIndex].getAttribute('data-price'));
+                    const RAMPrice = parseFloat(document.getElementById('RAM-options').options[document.getElementById('RAM-options').selectedIndex].getAttribute('data-price'));
+                    const GPUPrice = parseFloat(document.getElementById('GPU-options').options[document.getElementById('GPU-options').selectedIndex].getAttribute('data-price'));
+                    const coolerPrice = parseFloat(document.getElementById('cooler-options').options[document.getElementById('cooler-options').selectedIndex].getAttribute('data-price'));
+                    const powerSupplyPrice = parseFloat(document.getElementById('power-supply-options').options[document.getElementById('power-supply-options').selectedIndex].getAttribute('data-price'));
+                    const totalPrice = casePrice + motherboardPrice + processorPrice + RAMPrice + GPUPrice + coolerPrice + powerSupplyPrice;
+
+                    document.getElementById('total-price').innerHTML = "$" + totalPrice;
+                    total_price_row.style.display = 'table-row';
+                    submit_button.style.display = 'table-row';
+
+
+                } else {
+                    submit_button.style.display = 'none';
+                }
+            });
         } else {
             // No cooler has been selected yet, alert user
         }
