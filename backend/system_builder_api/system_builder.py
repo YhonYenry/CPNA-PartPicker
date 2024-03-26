@@ -1,3 +1,4 @@
+from flask import jsonify
 import mysql.connector
 
 def getCases(mysql_config, request):
@@ -337,3 +338,43 @@ def getPowerSupply(mysql_config, request):
             print("Error closing cursor/connection:", e)
 
     return power_supply_options_html
+
+def submitOrder(mysql_config, request, username):
+    # Create MySQL connection
+    db_connection = mysql.connector.connect(**mysql_config)
+    db_cursor = db_connection.cursor(dictionary=True)
+
+
+    # Get parts from request
+    order_price = request.args.get('total_price')
+    case_id = request.args.get('case_ID')
+    motherboard_id = request.args.get('motherboard_ID')
+    processor_id = request.args.get('processor_ID')
+    RAM_id = request.args.get('RAM_ID')
+    GPU_id = request.args.get('GPU_ID')
+    cooler_id = request.args.get('cooler_ID')
+    power_supply_id = request.args.get('power_supply_ID')
+
+    get_userID_query = "SELECT id from users where username=%s" 
+    db_cursor.execute(get_userID_query, (username,))
+    userID = db_cursor.fetchone()['id']
+    print(userID)
+    if userID:
+        # Add order to the database
+        submit_order_query = "INSERT INTO orders (build_creator, is_complete, total_price, case_id, motherboard_id, processor_id, ram_id, gpu_id, cpu_cooler_id, powersupply_id) VALUES (%s, 0, %s, %s, %s, %s, %s, %s, %s, %s)"
+        db_cursor.execute(submit_order_query, (userID, order_price, case_id, motherboard_id, processor_id, RAM_id, GPU_id, cooler_id, power_supply_id))
+        db_connection.commit()
+        affected_rows = db_cursor.rowcount
+        print(affected_rows)
+
+        # Close MySQL connection
+        db_cursor.close()
+        db_connection.close()
+
+        if affected_rows:
+            # Username exists in database, send error message
+            return jsonify({"msg": "order_created"}), 200
+        else:
+            return jsonify({"msg": "database_err"}), 200
+    else:
+        return jsonify({"msg": "username_err"}), 200

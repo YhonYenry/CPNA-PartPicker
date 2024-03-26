@@ -27,7 +27,8 @@ def login(mysql_config, data):
         # Username exists in database, check password
         if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
             expiration_time = timedelta(minutes=30)
-            access_token = create_access_token(identity=username, expires_delta=expiration_time)
+            access_token = create_access_token(identity=username, additional_claims={'username': username}, expires_delta=expiration_time)
+
             return jsonify(access_token=access_token), 200
         else:
             return jsonify({"msg": "pswd_err"}), 200

@@ -401,3 +401,32 @@ async function getPowerSupplys() {
         console.error('Error fetching power supplies:', error);
     }
 }
+
+async function submitBuild() {
+    // Get component ID's
+    const caseID = document.getElementById('case-options').options[document.getElementById('case-options').selectedIndex].value;
+    const motherboardID = document.getElementById('motherboard-options').options[document.getElementById('motherboard-options').selectedIndex].value;
+    const processorID = document.getElementById('processor-options').options[document.getElementById('processor-options').selectedIndex].value;
+    const RAMID = document.getElementById('RAM-options').options[document.getElementById('RAM-options').selectedIndex].value;
+    const GPUID = document.getElementById('GPU-options').options[document.getElementById('GPU-options').selectedIndex].value;
+    const coolerID = document.getElementById('cooler-options').options[document.getElementById('cooler-options').selectedIndex].value;
+    const powerSupplyID = document.getElementById('power-supply-options').options[document.getElementById('power-supply-options').selectedIndex].value;
+    const totalPrice = document.getElementById('total-price').innerHTML.slice(1);
+
+    try {
+        const authToken = getCookie('authToken');
+        const response = await fetch(`http://partcheck.online:5000/api/submitOrder?case_ID=${caseID}&motherboard_ID=${motherboardID}&processor_ID=${processorID}&RAM_ID=${RAMID}&GPU_ID=${GPUID}&cooler_ID=${coolerID}&power_supply_ID=${powerSupplyID}&total_price=${totalPrice}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const JSONResponse = await response.json();
+        console.log(JSONResponse);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
