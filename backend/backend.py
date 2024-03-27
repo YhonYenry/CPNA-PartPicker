@@ -7,6 +7,7 @@ from sign_up_api.sign_up import signup
 from sign_in_api.login import login
 from reset_password_api.reset_password import send_reset_password, reset_password
 from system_builder_api.system_builder import getCases, getMotherboards, getProcessors, getRAM, getGPU, getCoolers, getPowerSupply, submitOrder
+from order_history_api.order_history import getOrders
 
 app = Flask(__name__, template_folder='../frontend/protected')
 app.config['JWT_SECRET_KEY'] = '0376911010287a8b6ee74124123705a2'
@@ -169,6 +170,17 @@ def submitOrder_route():
     current_user = get_jwt_identity()
 
     response = submitOrder(mysql_config, request, current_user)
+    return response
+
+# Get Orders Query - Gets orders to be displayed on build history
+@app.route('/api/getOrders', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getOrders_route():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    response = getOrders(mysql_config, current_user)
     return response
 
 # Component List

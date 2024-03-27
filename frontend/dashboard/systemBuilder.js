@@ -47,7 +47,6 @@ async function getMotherboards() {
     try {
         // Get previous selections
         const selectedCase = document.getElementById('case-options').value;
-        console.log(selectedCase);
 
         // Check if previous selections has been made
         if (selectedCase != "default") {
@@ -126,7 +125,6 @@ async function getProcessors() {
             // Event listener to display processor selection after motherboard selection is made
             document.getElementById('processor-options').addEventListener('change', function () {
                 const RAM_Row = document.getElementById('RAM-row');
-                console.log("option selected!");
 
                 // Show or hide processor-row based on selected value
                 if (this.value !== 'default') {
@@ -170,8 +168,6 @@ async function getRAM() {
                 }
             });
 
-            console.log(response);
-
             if (!response.ok) {
                 throw new Error('Error in response!');
             }
@@ -181,7 +177,6 @@ async function getRAM() {
             // Event listener to display processor selection after motherboard selection is made
             document.getElementById('RAM-options').addEventListener('change', function () {
                 const GPU_Row = document.getElementById('GPU-row');
-                console.log("option selected!");
 
                 // Show or hide processor-row based on selected value
                 if (this.value !== 'default') {
@@ -239,7 +234,6 @@ async function getGPU() {
             // Event listener to display processor selection after motherboard selection is made
             document.getElementById('GPU-options').addEventListener('change', function () {
                 const cooler_Row = document.getElementById('cooler-row');
-                console.log("option selected!");
 
                 // Show or hide processor-row based on selected value
                 if (this.value !== 'default') {
@@ -298,7 +292,6 @@ async function getCoolers() {
             // Event listener to display processor selection after motherboard selection is made
             document.getElementById('cooler-options').addEventListener('change', function () {
                 const power_supply_row = document.getElementById('power-supply-row');
-                console.log("option selected!");
 
                 // Show or hide processor-row based on selected value
                 if (this.value !== 'default') {
@@ -365,7 +358,6 @@ async function getPowerSupplys() {
             document.getElementById('power-supply-options').addEventListener('change', function () {
                 const submit_button = document.getElementById('submit-buttom-row');
                 const total_price_row = document.getElementById('total-price-row');
-                console.log("option selected!");
 
                 // Show or hide processor-row based on selected value
                 if (this.value !== 'default') {

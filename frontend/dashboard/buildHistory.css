@@ -13,6 +13,10 @@ h3 {
     margin: 0;
 }
 
+td {
+    height: 50px;
+}
+
 a {
     color: #007bff;
     text-decoration: none;
@@ -20,6 +24,10 @@ a {
 
 th {
     text-align: left;
+}
+
+.order-entry {
+    height: 50px;
 }
 
 #left-dashboard {
@@ -94,7 +102,7 @@ th {
     width: 80%;
     margin-top: 8px;
     border-radius: 10px;
-    min-height: 60vh;
+    max-height: 60vh;
 }
 
 .content-title {

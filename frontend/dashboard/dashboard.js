@@ -32,14 +32,12 @@ async function fetchDashboard() {
             }
         });
 
-        console.log(response);
 
         if (!response.ok) {
             window.location.href = "http://partcheck.online:8080";
         }
 
         const htmlContent = await response.text();
-        console.log(htmlContent);
         document.documentElement.innerHTML = htmlContent;
         attachEventListeners();
         return 200;
@@ -61,14 +59,12 @@ function openCreateBuild() {
         }
     })
         .then(response => {
-            console.log(response);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.text();
         })
         .then(htmlContent => {
-            console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
             attachEventListeners();
             return 200;
@@ -89,14 +85,12 @@ function openComponentList() {
         }
     })
         .then(response => {
-            console.log(response);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.text();
         })
         .then(htmlContent => {
-            console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
             attachEventListeners();
             return 200;
@@ -117,14 +111,12 @@ function openAddComponent() {
         }
     })
         .then(response => {
-            console.log(response);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.text();
         })
         .then(htmlContent => {
-            console.log(htmlContent);
             document.documentElement.innerHTML = htmlContent;
             attachEventListeners();
             return 200;
@@ -134,32 +126,32 @@ function openAddComponent() {
         });
 }
 
-function openBuildHistory() {
-    const authToken = getCookie('authToken');
+async function openBuildHistory() {
+    try {
+        const authToken = getCookie('authToken');
 
-    fetch('http://partcheck.online:5000/api/buildHistory', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            console.log(response);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        const response = await fetch('http://partcheck.online:5000/api/buildHistory', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
             }
-            return response.text();
-        })
-        .then(htmlContent => {
-            console.log(htmlContent);
-            document.documentElement.innerHTML = htmlContent;
-            attachEventListeners();
-            return 200;
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const htmlContent = await response.text();
+        document.documentElement.innerHTML = htmlContent;
+
+        // Get orders from database based on username
+        await getOrders();
+
+        attachEventListeners();
+        return 200;
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
 }
 
 // Gets the cookie from browser
