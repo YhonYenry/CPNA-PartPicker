@@ -7,7 +7,7 @@ from sign_up_api.sign_up import signup
 from sign_in_api.login import login
 from reset_password_api.reset_password import send_reset_password, reset_password
 from system_builder_api.system_builder import getCases, getMotherboards, getProcessors, getRAM, getGPU, getCoolers, getPowerSupply, submitOrder
-from order_history_api.order_history import getOrders
+from order_history_api.order_history import getOrders, getComponentNames, deleteOrder, orderCompleted
 
 app = Flask(__name__, template_folder='../frontend/protected')
 app.config['JWT_SECRET_KEY'] = '0376911010287a8b6ee74124123705a2'
@@ -183,6 +183,41 @@ def getOrders_route():
     response = getOrders(mysql_config, current_user)
     return response
 
+# Get Component Names Query - Gets component names to be displayed on order history page
+@app.route('/api/getComponentNames', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def getComponentNames_route():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+
+    response = getComponentNames(mysql_config, request)
+    return response
+
+# Delete Order Query - Deletes orders that are currently in progress
+@app.route('/api/deleteOrder', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def deleteOrder_route():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+    order_id = request.args.get('order_id')
+
+    response = deleteOrder(mysql_config, order_id)
+    return response
+
+# Order Complete Query - Updates order status to complete
+@app.route('/api/orderCompleted', methods=['GET'])
+@jwt_required()
+@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
+def orderCompleted_route():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+    order_id = request.args.get('order_id')
+
+    response = orderCompleted(mysql_config, order_id)
+    return response
+    
 # Component List
 @app.route('/api/componentList', methods=['GET'])
 @jwt_required()

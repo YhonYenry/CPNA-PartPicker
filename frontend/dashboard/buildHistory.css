@@ -1,6 +1,8 @@
+html,
 body {
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 h2 {
@@ -71,6 +73,7 @@ th {
 
 #dashboard {
     width: 100vw;
+    height: 100%;
     background-color: #b3b3b3;
     color: white;
     display: flex;
@@ -100,12 +103,96 @@ th {
 #history-table {
     background-color: #555;
     width: 80%;
+    height: 90%;
     margin-top: 8px;
     border-radius: 10px;
-    max-height: 60vh;
 }
 
 .content-title {
     text-align: center;
     margin-top: 8px;
+}
+
+.order-row {
+    max-height: 50px;
+    cursor: pointer;
+}
+
+#order-info-popup {
+    color: white;
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 40%;
+    height: 60%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    border: 2px solid #b3b3b3;
+    background-color: #555;
+}
+
+#order-title {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#order-creation-info {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+#order-price-power {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 10px;
+}
+
+#order-price {
+    justify-content: center;
+    display: flex;
+    width: 50%;
+    text-align: center;
+}
+
+#order-price-value {
+    padding-left: 10px;
+}
+
+#order-power {
+    justify-content: center;
+    display: flex;
+    width: 50%;
+    text-align: center;
+}
+
+#order-power-value {
+    padding-left: 10px;
+}
+
+.order-component {
+    padding-left: 10px;
+    display: flex;
+    height: 40px
+}
+
+.order-component-title {
+    width: 100px;
+}
+
+#exit-icon {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    cursor: pointer;
+}
+
+#order-buttons {
+    display: flex;
+    justify-content: space-around;
 }

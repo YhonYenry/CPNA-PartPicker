@@ -125,3 +125,11 @@ select {
     margin-left: 50%;
     transform: translateX(-50%);
 }
+
+.selection-option {
+    width: 225px;
+}
+
+#type-column {
+    min-width: 105px;
+}
