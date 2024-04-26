@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Capstone Frontend</title>
+    <link rel="stylesheet" href="./buildHistory.css">
+    <script src="./dashboard.js"></script>
+    <script src="./buildHistory.js"></script>
+</head>
+
+<body>
+    <main>
+        <div id="dashboard">
+            <div id="title">
+                <h2>Build History</h2>
+            </div>
+            <div id="main-content">
+                <div id="left-dashboard">
+                    <div id="create-build" onclick="openCreateBuild()" class="dashboard-button">
+                        <img src="./icons/build-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Build New System
+                        </div>
+                    </div>
+                    <div id="add-component" onclick="openAddComponent()" class="dashboard-button">
+                        <img src="./icons/add-component-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Add Component
+                        </div>
+                    </div>
+                    <div id="Build History" onclick="openBuildHistory()" class=" dashboard-button">
+                        <img src="./icons/history-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Build History
+                        </div>
+                    </div>
+                    <div id="sign-out" onclick="clearCookie()" class="dashboard-button">
+                        <img src="./icons/sign-out-icon.png" height="20px">
+                        <div class="dashboard-button-description">
+                            Sign out
+                        </div>
+
+                    </div>
+                </div>
+                <div id="right-dashboard">
+                    <div id="history-table-container">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Order Date</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="order-info-popup">
+            <div id="order-title">
+            </div>
+            <div id="exit-icon" onclick="closeOrderInfo()">
+                <img src="../dashboard/icons/x.png" height="32px">
+            </div>
+            <div id="order-creation-info">
+            </div>
+            <div id="order-price-power">
+                <div id="order-price">
+                    <div>Price:</div>
+                    <div id="order-price-value"></div>
+                </div>
+                <div id="order-power">
+                    <div>Power Consumption:</div>
+                    <div id="order-power-value"></div>
+                </div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">Case:</div>
+                <div id="order-case">
+                </div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">Motherboard:</div>
+                <div id="order-motherboard"></div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">Processor:</div>
+                <div id="order-processor"></div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">RAM:</div>
+                <div id="order-RAM"></div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">GPU:</div>
+                <div id="order-GPU"></div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">Cooler:</div>
+                <div id="order-cooler"></div>
+            </div>
+            <div class="order-component">
+                <div class="order-component-title">Power Supply:</div>
+                <div id="order-power-supply"></div>
+            </div>
+            <div id="order-buttons">
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

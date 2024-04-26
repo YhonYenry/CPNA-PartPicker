@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Capstone Frontend</title>
     <link rel="stylesheet" href="./addComponent.css">
+    <script src="./addComponent.js"></script>
     <script src="./dashboard.js"></script>
 </head>
 
@@ -18,22 +19,10 @@
             </div>
             <div id="main-content">
                 <div id="left-dashboard">
-                    <div id="return-dashboard" onclick="fetchDashboard()" class="dashboard-button">
-                        <img src="./icons/dashboard-icon.png" height="20px">
-                        <div class="dashboard-button-description">
-                            Dashboard
-                        </div>
-                    </div>
                     <div id="create-build" onclick="openCreateBuild()" class="dashboard-button">
                         <img src="./icons/build-icon.png" height="20px">
                         <div class="dashboard-button-description">
                             Build New System
-                        </div>
-                    </div>
-                    <div id="component-search" onclick="openComponentList()" class="dashboard-button">
-                        <img src="./icons/component-list-icon.png" height="20px">
-                        <div class="dashboard-button-description">
-                            Component List
                         </div>
                     </div>
                     <div id="add-component" onclick="openAddComponent()" class="dashboard-button">
@@ -57,22 +46,23 @@
                     </div>
                 </div>
                 <div id="right-dashboard">
-                <div id="add-component-form-container">
-                    <form id="add-component-form">
-                        <div class="dropdown">
-                            <button>Add Component</button>
-                            <div class="dropdown-content">
-                                <a href="casesform.html">Cases</a>
-                                <a href="">CPU</a>
-                                <a href="motherboardform.html">Motherboard</a>
-                            </div>
-                    </form>
-                    
+                    <div id="add-component-form-container">
+                        <form id="add-component-form">
+                            <div class="dropdown">
+                                <button>Add Component</button>
+                                <div class="dropdown-content">
+                                    <a onclick="addCaseClicked()">Cases</a>
+                                    <a href="cpuform.html">CPU</a>
+                                    <a href="motherboardform.html">Motherboard</a>
+                                    <a href="ramform.html">RAM</a>
+                                </div>
+                        </form>
+
                     </div>
                 </div>
-                
-                </div>
+
             </div>
+        </div>
         </div>
     </main>
 </body>

@@ -109,12 +109,13 @@ th {
 }
 
 .dropdown{
-    display: inline-block; 
+    position: relative;
+    display: flex;
+    justify-content: center 
 }
 
 .dropdown button{
-
-    background-color: white; 
+ 
     color: black; 
     padding: 10px 15px; 
     border: none;
@@ -129,18 +130,15 @@ th {
 
 }
 
-.dropdown .context{
-
-    position: absolute; 
-    background-color: hsl(0, 1%, 72%); 
-    min-width: 100px; 
-    box-shadow: 2px 2px 5px hsl(0,0%,0%); 
-
+.dropdown-content a {
+    color: black;
+    padding: 10px 15px;
+    display: block;
+    text-decoration: none;
 }
 
 .dropdown:hover .content{
     display: block; 
-
 
 }
 

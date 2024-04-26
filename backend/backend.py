@@ -237,43 +237,15 @@ def openAddComponent():
     return render_template('/addComponent/addComponent.html', logged_in_as=current_user)
 
 
-@app.route('/submit_case')
-def case_form():
-        return render_template('caseform.html')
 #Add Case
-@app.route('/submit/component', methods=['POST'])
+@app.route('/api/addComponent', methods=['POST'])
 @jwt_required()
 @cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-def submit_case(): 
-    case_name = request.form['case_name']
-    part_id = request.form['part_id']
-    category_id = request.form['category_id']
-    manufacturer_id = request.form['manufacturer_id']
-    form_factor = request.form['form_factor']
-    dimensions = request.form['dimensions']
-    power_supply = 1 if 'power_supply' in request.form else 0
-    external_bays = request.form['external_bays']
-    internal_bays = request.form['internal_bays']
-    weight = request.form['weight']
-    price = request.form['price']
-
-    sql = "INSERT INTO your_table_name (case_name, part_id, category_id, manufacturer_id, form_factor, dimensions, power_supply, external_bays, internal_bays, weight, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    val = (case_name, part_id, category_id, manufacturer_id, form_factor, dimensions, power_supply, external_bays, internal_bays, weight, price)
-    cursor.execute(sql, val)
-    return 'Form Sucessfully Submitted'
-
-
-#Add Motherboard
-@app.route('/submit_motherboard', methods=['POST'])
-def motherboard_form(): 
-    return render_template('motherboardfrom.html')
-
-#@app.route('/submit/component', methods=['POST'])
-#@jwt_required()
-#@cross_origin(origin='http://partcheck.online:8080', headers=['Content-Type', 'Authorization'])
-#def submit_motherboard():
-    
-
+def addCase_route():
+    print("Checking auth")
+    current_user = get_jwt_identity()
+    response = getCases(mysql_config)
+    return response
 
 
 

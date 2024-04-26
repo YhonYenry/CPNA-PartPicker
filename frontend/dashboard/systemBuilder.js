@@ -417,8 +417,26 @@ async function submitBuild() {
 
         const JSONResponse = await response.json();
         console.log(JSONResponse);
+        openBuildHistory();
 
     } catch (error) {
         console.log(error);
     }
+}
+
+function resetSelections(currentSelection) {
+    var selectBoxes = document.querySelectorAll('.selection-option');
+    document.getElementById('total-price-row').style.display = 'none';
+    document.getElementById('submit-buttom-row').style.display = 'none';
+
+    selectBoxes.forEach(function (selectBox, index, selectBoxArray) {
+        if (index > currentSelection) {
+            selectBox.parentNode.parentNode.style.display = 'none';
+        } else if (index === currentSelection && index < selectBoxArray.length - 1) {
+            var nextSelection = selectBoxArray[index + 1]
+            nextSelection.selectedIndex = 0;
+            nextSelection.parentNode.parentNode.querySelector('.component-price').innerHTML = '$--.--';
+        }
+    })
+
 }
